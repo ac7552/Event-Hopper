@@ -11,8 +11,8 @@
    CSS, Javascript
    
 ## APIs used 
-	Google Maps Places 
-	Ticket Master Discovery
+	[Google Maps Places] (https://developers.google.com/maps/documentation/javascript/places) 
+	[Ticket Master Discovery] (http://developer.ticketmaster.com/products-and-docs/apis/discovery/v2/)
 
 ## How to use: 
 	Type into the Searchbox and press <Enter> 
