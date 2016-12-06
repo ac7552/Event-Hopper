@@ -5,7 +5,7 @@
     I'm a huge fan of Hip Hop music, so the inspiration behind this was to enable fellow Hip Hop heads the opportunity to check out current or upcoming concerts, while they casually search for other things.  
 
 ## Event-Hopper in action
-#! [New York City Search] (https://github.com/ac7552/Event-Hopper/blob/master/newyork.png)
+#![New York City Search] (https://github.com/ac7552/Event-Hopper/blob/master/newyork.png)
 
 ## Languages used: 
    CSS, Javascript
