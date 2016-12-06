@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+     <meta charset="utf-8">
+  <style>
+  #parent{
+    display: flex;
+    justify-content: space-around;
+  }
+    #center{
+      background-color: white;
+      width: 600px;
+      height: 600px;
+      /*position: relative;*/
+      left: 602px;
+      /*bottom:  600px;*/
+      border: 1px solid black;
+      border-radius: 10px;
+      overflow:scroll;
+      overflow-x:hidden;
+    }
+
+    #outter-ticket{
+       display: flex;
+       flex-wrap: wrap;
+    }
+
+    #ticket{
+      height: 120px;
+      background-color: rgba(0, 0, 0, 0.1);;
+      padding: 5px;
+      margin: 3px;
+      width: 120px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: black;
+      border: 1px solid black;
+      word-wrap: normal;
+
+    }
+
+    a{
+      text-decoration: none;
+      color: black;
+    }
+
+    #label{
+      padding: 40px;
+      border: 1px solid black;
+      width: 400px;
+      height: 300px;
+      margin-right: auto;
+      margin-left: auto;
+      border-radius: 10px;
+    }
+
+    a:hover {
+     color:grey;
+     text-decoration:none;
+     cursor:pointer;
+    }
+
+    #artist{
+      border-radius: 50%;
+      border: 1px solid black;
+      margin: 5px;
+    }
+
+     #map{
+       height: 600px;
+       width: 600px;
+     }
+     #input-search{
+       background-color: white;
+        font-size: 15px;
+        font-weight: 300;
+        text-overflow: ellipsis;
+        width: 250px;
+        text-decoration: none;
+
+     }
+
+   /* Optional: Makes the sample page fill the window. */
+   html, body {
+     height: 100%;
+     margin: 0;
+     padding: 0;
+   }
+ </style>
+
+    <meta charset="utf-8">
+    <title>Zenefits</title>
+  </head>
+  <body>
+    <input id="input-search" type="text" name="name" placeHolder="search"></input>
+    <div id="label">
+      <h1>Welcome to Event Hopper!</h1>
+        <p>Using the search box you can search for anything via google maps places api.
+        Once the search is complete you'll get the nearest hip hop concerts that are happening in or after December.</p>
+        <b><p>Unforunately the events finder feature only works for the United States, United Kingdom, Ireland, Australia, New Zealand, Mexico and Canada.</p></b>
+        <p>Enjoy!</p>
+    </div>
+    <div id="parent">
+
+
+      <div id="map"></div>
+      <div id="event_Stuff"></div>
+      <div id="center"></div>
+      </div>
+
+    </div>
+
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+    <script>
+   var map;
+   var markers = [];
+   var Ticket_Master_Events;
+   var ticket_content;
+   var content;
+   var infowindow;
+   //Get all events from TicketMaster API
+   //Filter by Hip Hop concerts  in or after december
+   //XMLHttpRequest was used instead of ajax because of CSRF
+   function getEvents(lat, long){
+     var latlon = lat+","+long
+     var xhr = new XMLHttpRequest()
+     xhr.open("GET", 'https://app.ticketmaster.com/discovery/v2/events.jsonp?keyword=rap&apikey=5QGCEXAsJowiCI4n1uAwMlCGAcSNAEmG&latlong='+latlon + `&&startDateTime=` +`2016-12-10T00:00:00Z` + `&&classificationName=music` ,true)
+     xhr.onreadystatechange = function(){
+       if((xhr.readyState==4) && (xhr.status=200)){
+         var ob = JSON.parse(xhr.responseText);
+        window.Ticket_Master_Events = ob._embedded.events
+        $('#outter-ticket').remove()
+        ticket_content= `<div id=outter-ticket>`;
+        for(i = 0; i < Ticket_Master_Events.length; i++){
+           ticket_content += `<div id=ticket> <div id=artistStuff> <img id=artist src=${Ticket_Master_Events[i].images[1].url}  height="42" width="42"></img><br> </div>   <p><b> <a href=${Ticket_Master_Events[i].url} target="_blank">${Ticket_Master_Events[i].name}</a></b></p></div>`
+        }
+        ticket_content += `</div>`
+        $('#center').append(ticket_content)
+       }
+     };
+     xhr.send()
+   }
+
+   //initialize map function to use google.maps.places.SearchBox constructor
+   function initialize(){
+    var center = {lat: -33.8688, lng: 151.2195}
+    var input = document.getElementById('input-search');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 15,
+      center: center
+    });
+
+     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+     map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+      });
+
+     //listener for searchBox
+     searchBox.addListener( 'places_changed', function() {
+       var places = searchBox.getPlaces();
+       if(places.length == 0 ){
+         return;
+     }
+
+     //set markers to null for fresh start
+     for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+
+     var infowindow = new google.maps.InfoWindow({
+       content: ""
+    });
+
+     var results = searchBox.getPlaces();
+     var data_ticket = getEvents(results[0].geometry.location.lat(), results[0].geometry.location.lng())
+
+     //create markers
+     map.setCenter(new google.maps.LatLng( results[0].geometry.location.lat(), results[0].geometry.location.lng() ) )
+     for (var i = 0; i < results.length; i++) {
+       var marker = new google.maps.Marker({
+         map: map,
+         icon: results[i].icon,
+         title: results[i].name,
+         position: {lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng()},
+         price: results[i].price_level,
+         rating: results[i].rating,
+       });
+       //add markers to array
+       markers.push(marker)
+       //check if marker has been clicked
+       google.maps.event.addListener(marker,'click', function() {
+         infowindow.close()
+         //content for a marker
+         //price and rating
+        content =
+         "<div>"+
+           "<div id=iw-container> </id>"+
+          `<p><b>${this.title}</b></p>`+
+          `<p><b>${((this.price === undefined) ? "" : "Price Level: " + this.price)}</b></p>`+
+          `<p><b>${((this.rating === undefined) ? "" : "Rating: " + this.rating)}</b></p>`
+          "</div>"+
+          "</div>";
+         infowindow = new  google.maps.InfoWindow({
+         borderRadius: 50,
+         content: content
+         });
+          //open info window for particular marker if clicked
+             infowindow.open(map,this);
+       });
+      }
+
+
+     })
+
+
+   }
+
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-d1YVUaZxA4FUHjxd53izKhD25dm9gws&libraries=places&callback=initialize
+" async defer></script>
+  </body>
+</html>
