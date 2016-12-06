@@ -1,4 +1,4 @@
-# Event Hopper(https://ac7552.github.io/Event-Hopper/)
+# [Event Hopper](https://ac7552.github.io/Event-Hopper/)
 
 
 ## Motivation: 
@@ -7,6 +7,10 @@
 
 ## Languages used: 
    CSS, Javascript
+   
+## APIs used 
+	Google Maps Places 
+	Ticket Master Discovery
 
 ## How to use: 
 	Type into the Searchbox and press <Enter> 
