@@ -1,79 +1,104 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
      <meta charset="utf-8">
   <style>
+
+ #page{
+   background-color: #a75859;
+ }
+
   #parent{
     display: flex;
     justify-content: space-around;
   }
+
+
     #center{
-      background-color: white;
-      width: 600px;
-      height: 600px;
-      /*position: relative;*/
-      left: 602px;
-      /*bottom:  600px;*/
-      border: 1px solid black;
+      width: 25%;
+      height: 500px;
       border-radius: 10px;
       overflow:scroll;
       overflow-x:hidden;
+      margin-right: 120px;
     }
 
     #outter-ticket{
        display: flex;
        flex-wrap: wrap;
+       margin-top: 80px;
     }
 
     #ticket{
-      height: 120px;
-      background-color: rgba(0, 0, 0, 0.1);;
+      height: 200px;
+      background-color: white;
       padding: 5px;
-      margin: 3px;
-      width: 120px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      margin: 10px;
+      width: 190px;
+      border-radius: 5px;
       font-size: 10px;
-      color: black;
-      border: 1px solid black;
       word-wrap: normal;
+    }
+
+    #ticket:hover{
+      transition: all 0.5s ease;
+      box-shadow: 1px 1px 15px black;
 
     }
 
+
     a{
+      font-family: 'Futura', Arial, sans-serif;
       text-decoration: none;
       color: black;
+      display: block;
+      text-align: center;
+      font-size: 15px;
     }
 
     #label{
       padding: 40px;
-      border: 1px solid black;
-      width: 400px;
-      height: 300px;
+      width: 50%;
+      height: 10%;
       margin-right: auto;
       margin-left: auto;
+      margin-bottom: 10px;
       border-radius: 10px;
+      color: #009cde;
+}
+
+
+  h1{
+    font-family: 'Futura', Arial, sans-serif;
+    border: none;
+    color: white;
+    text-align: center;
+
+    }
+    p{
+      font-family: 'Futura', Arial, sans-serif;
+      color: black;
     }
 
-    a:hover {
-     color:grey;
-     text-decoration:none;
-     cursor:pointer;
-    }
 
     #artist{
-      border-radius: 50%;
-      border: 1px solid black;
+      border-radius: 5px;
+      height: 100px;
+      width:  100px;
       margin: 5px;
+      display: block;
+      margin: 0 auto;
     }
 
      #map{
-       height: 600px;
-       width: 600px;
+       height: 500px;
+       width: 500px;
+       border-radius: 5px;
+       margin-left: 180px;
      }
+
      #input-search{
        background-color: white;
         font-size: 15px;
@@ -84,7 +109,16 @@
 
      }
 
-   /* Optional: Makes the sample page fill the window. */
+     #currentTracks{
+       position: absolute;
+       background-color: white;
+           width: 160px;
+       font-size: 18px;
+       border-radius: 5px;
+       text-align: center;
+           right: 280px;
+     }
+
    html, body {
      height: 100%;
      margin: 0;
@@ -97,6 +131,7 @@
   </head>
   <body>
     <input id="input-search" type="text" name="name" placeHolder="search"></input>
+  <div id="page">
     <div id="label">
       <h1>Welcome to Event Hopper!</h1>
         <p>Using the search box you can search for anything via google maps places api.
@@ -104,14 +139,24 @@
         <b><p>Unforunately the events finder feature only works for the United States, United Kingdom, Ireland, Australia, New Zealand, Mexico and Canada.</p></b>
         <p>Enjoy!</p>
     </div>
+
+
     <div id="parent">
-
-
       <div id="map"></div>
       <div id="event_Stuff"></div>
-      <div id="center"></div>
+      <div id="center">
+        <div id="currentTracks">
+            <p>
+            <b>
+              Latest Tickets:
+            </b>
+            </p>
+        </div>
+
       </div>
 
+    </div>
+  </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
@@ -135,7 +180,7 @@
         $('#outter-ticket').remove()
         ticket_content= `<div id=outter-ticket>`;
         for(i = 0; i < Ticket_Master_Events.length; i++){
-           ticket_content += `<div id=ticket> <div id=artistStuff> <img id=artist src=${Ticket_Master_Events[i].images[1].url}  height="42" width="42"></img><br> </div>   <p><b> <a href=${Ticket_Master_Events[i].url} target="_blank">${Ticket_Master_Events[i].name}</a></b></p></div>`
+           ticket_content += `<div id=ticket> <a href=${Ticket_Master_Events[i].url} target="_blank"> <div id=artistStuff> <img id=artist src=${Ticket_Master_Events[i].images[1].url}  height="42" width="42"></img><br> </div>   <p><b> ${Ticket_Master_Events[i].name}</a></b></p></div>`
         }
         ticket_content += `</div>`
         $('#center').append(ticket_content)
@@ -150,7 +195,7 @@
     var input = document.getElementById('input-search');
     var searchBox = new google.maps.places.SearchBox(input);
     map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 15,
+      zoom: 10,
       center: center
     });
 
