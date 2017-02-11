@@ -7,7 +7,13 @@
   <style>
 
  #page{
-   background-color: #a75859;
+   background-image: url("https://static1.squarespace.com/static/53dc0ad4e4b0d46c1be75c62/t/5405b530e4b01b550b3fb0e7/1409660223175/Concert+goers+with+phones+in+air.jpg?format=1500w");
+   background-size: 100% 100%;
+   background-repeat: no-repeat;
+   -webkit-filter: grayscale(100%);
+   filter: grayscale(100%);
+
+
  }
 
   #parent{
@@ -15,6 +21,22 @@
     justify-content: space-around;
   }
 
+  #banner{
+    width: 100%;
+    background-color: #1E90FF;
+    height: 50px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+
+  }
+  #event-hopper{
+    margin: 20px;
+    font-family:   Arial, sans-serif;
+    font-weight: 200;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.8);
+  }
 
     #center{
       width: 25%;
@@ -50,7 +72,7 @@
 
 
     a{
-      font-family: 'Futura', Arial, sans-serif;
+      font-family: Arial, sans-serif;
       text-decoration: none;
       color: black;
       display: block;
@@ -67,18 +89,19 @@
       margin-bottom: 10px;
       border-radius: 10px;
       color: #009cde;
+
 }
 
 
   h1{
-    font-family: 'Futura', Arial, sans-serif;
+    font-family: Arial, sans-serif;
     border: none;
     color: white;
     text-align: center;
 
     }
     p{
-      font-family: 'Futura', Arial, sans-serif;
+      font-family: 'Fira Sans', 'sans-serif';
       color: black;
     }
 
@@ -97,6 +120,7 @@
        width: 500px;
        border-radius: 5px;
        margin-left: 180px;
+       margin-bottom: 200px;
      }
 
      #input-search{
@@ -106,17 +130,18 @@
         text-overflow: ellipsis;
         width: 250px;
         text-decoration: none;
-
      }
 
+
+
      #currentTracks{
-       position: absolute;
+       position: relative;
        background-color: white;
-           width: 160px;
+       width: 160px;
        font-size: 18px;
        border-radius: 5px;
        text-align: center;
-           right: 280px;
+       left: 10%;
      }
 
    html, body {
@@ -129,15 +154,20 @@
     <meta charset="utf-8">
     <title>Event Hopper</title>
   </head>
+
+
+
   <body>
+    <div id="banner">
+      <p id="event-hopper">Event Hopper</p>
+    </div>
     <input id="input-search" type="text" name="name" placeHolder="search"></input>
   <div id="page">
     <div id="label">
-      <h1>Welcome to Event Hopper!</h1>
-        <p>Using the search box you can search for anything via google maps places api.
-        Once the search is complete you'll get the nearest hip hop concerts that are happening in or after December.</p>
+        <b><p>Using the search box you can search for anything via google maps places api.
+        Once the search is complete you'll get the nearest hip hop concerts that are happening in that area.</p></b>
         <b><p>Unforunately the events finder feature only works for the United States, United Kingdom, Ireland, Australia, New Zealand, Mexico and Canada.</p></b>
-        <p>Enjoy!</p>
+        <b><p>Enjoy!</p></b>
     </div>
 
 
@@ -147,7 +177,7 @@
       <div id="center">
         <div id="currentTracks">
             <p>
-            <b>
+            <b id="latest-tickets">
               Latest Tickets:
             </b>
             </p>
@@ -157,7 +187,6 @@
 
     </div>
   </div>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
    var map;
